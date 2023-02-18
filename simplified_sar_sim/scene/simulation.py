@@ -18,3 +18,5 @@ class Simulation:  # pylint: disable=too-few-public-methods
         Args:
             increment_step:
         """
+
+        self.t +=  increment_step

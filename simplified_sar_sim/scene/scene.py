@@ -26,3 +26,16 @@ class Scene:  # pylint: disable=too-few-public-methods
         """
         Description of radar reflectivity as a function of location.
         """
+
+
+class SimpleReflectivityFunctions:
+    """
+    Some simple reflectivity functions for debugging.
+    """
+
+    @staticmethod
+    def _one_point_target(rows: int = 200, cols: int = 200, ):
+        """
+        Sim
+        """
+
