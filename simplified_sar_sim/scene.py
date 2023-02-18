@@ -13,24 +13,48 @@ class Scene:  # pylint: disable=too-few-public-methods
     Scene of spatial ground reflectivity function.
     """
 
-    def __init__(self, width: int, height: int):
+    def __init__(self, reflectivity_density_function: np.ndarray):
         """
 
         Args:
-            width: Width of the scene.
-            height: Height of the scene.
+            reflectivity_density_function:
         """
 
-        del width
-        del height
-
-        self._reflectivity_density_function = ...
+        self._reflectivity_density_function = reflectivity_density_function
 
     @property
     def reflectivity_density_function(self):
         """
         Description of radar reflectivity as a function of location.
         """
+
+        return self._reflectivity_density_function
+
+    def get_distance_matrix(self, sensor_loc: Tuple[int, int]) -> np.ndarray:
+        """
+        Get Euclidean distance from sensor loc to each matrix loc.
+
+        Args:
+            sensor_loc: Tuple of row, col of simulated sensor location.
+        Returns:
+            Distance from sensor to each row, col location in scene.
+        """
+
+        n_rows, n_cols = self._reflectivity_density_function.shape
+        sensor_row, sensor_col = sensor_loc
+
+        # create a matrix of row and column indices
+        row_col_matrix = np.mgrid[0:n_rows, 0:n_cols]
+        row_inds, col_inds = row_col_matrix
+
+        # calculate differences
+        row_inds -= sensor_row
+        col_inds -= sensor_col
+
+        # euclidean distance from sensor to each pixel location
+        l2_distance = np.sqrt((row_inds**2) + (col_inds**2))
+
+        return l2_distance
 
 
 class SimpleReflectivityFunctions:
@@ -70,7 +94,9 @@ class SimpleReflectivityFunctions:
         # construct the scene's background contents
         size = (rows, cols)
         background_arr = background_noise_function(
-            *background_noise_function_args, **background_noise_function_kwargs, size=size
+            *background_noise_function_args,
+            **background_noise_function_kwargs,
+            size=size
         )
 
         # insert point response
