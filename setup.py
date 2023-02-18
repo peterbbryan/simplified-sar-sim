@@ -21,5 +21,5 @@ setuptools.setup(
     license="MIT",
     packages=setuptools.find_packages(),
     install_requires=["numpy"],
-    python_requires=">=3.8"
+    python_requires=">=3.8",
 )
